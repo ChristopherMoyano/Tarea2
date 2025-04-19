@@ -32,17 +32,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import com.example.tarea2.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavHostController){
     var selected by remember { mutableIntStateOf(0)}
-    val Categoria = Categoria(id= 0, title = "pelea", icon = R.drawable., contenido = mutableListOf<Contenido>())
-
-
+    val animeList = mutableListOf<Categoria>()
+    animeList.add(Categoria(id= 0, title = "Accion", icon = R.drawable.accion,
+                   contenido = mutableListOf<Contenido>()))
+    //animeList.add(Categoria(id= 1, title = "Fantasia", icon = R.drawable.fantasia,
+                   //contenido = mutableListOf<Contenido>()))
+    //animeList.add(Categoria(id= 2, title = "Romance", icon = R.drawable.romance,
+                   //contenido = mutableListOf<Contenido>()))
     Scaffold (modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
@@ -55,20 +59,21 @@ fun HomeScreen(navController: NavHostController){
         Column (
             modifier = Modifier.padding(innerPadding).fillMaxWidth(),
             horizontalAlignment =androidx.compose.ui.Alignment.CenterHorizontally,
-            verticalArrangement =Arrangement.Bottom
-        ){  }
+        ){
+            ListCard(animeList,selected,{selected = it})
+        }
     }
 
 }
 
 @Composable
-fun ListCategoria(categorias: List<Categoria>, selected: Int, changeSelected: (Int)-> Unit){
+fun ListCard(animeList: List<Categoria>, selected: Int, changeSelected: (Int)-> Unit){
     LazyVerticalGrid(
         columns =GridCells.Fixed(2),
         contentPadding = PaddingValues(20.dp),
         modifier = Modifier.fillMaxWidth()
     ){
-        items(categorias){
+        items(animeList){
             Card(
                 colors = CardColors(
                     containerColor = if (selected == it.id) Color(48, 78, 253, 255) else Color(
