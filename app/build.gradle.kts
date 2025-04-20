@@ -63,4 +63,6 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$navVersion")
     //JSON serialization library, works with the kotlin serialization plugin
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 }

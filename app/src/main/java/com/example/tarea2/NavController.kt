@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.tarea2.ui.FormularioScreen
 import com.example.tarea2.ui.HomeScreen
 import com.example.tarea2.ui.SecondScreen
 import kotlinx.serialization.Serializable
@@ -14,6 +15,9 @@ object Home
 
 @Serializable
 data class SecondPage(val id: Int)
+
+@Serializable
+object FormularioCat
 
 @Composable
 fun Navigation(){
@@ -27,5 +31,8 @@ fun Navigation(){
             val args = backStackEntry.toRoute<SecondPage>()
             SecondScreen(navController,args.id)
         }
-    }
+        composable <FormularioCat>{
+            FormularioScreen(navController)
+        }
+}
 }
