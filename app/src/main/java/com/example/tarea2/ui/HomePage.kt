@@ -35,20 +35,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import com.example.tarea2.R
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
-import com.example.tarea2.FormularioCat
 import com.example.tarea2.SecondPage
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController){
-    val viewModel: SharedViewModel = viewModel()
+fun HomeScreen(categoria: List<Categoria>,
+               onNavigateToFormulario:() ->Unit ,
+               navController: NavHostController){
     var selected by remember { mutableIntStateOf(0)}
-    val animeList = viewModel.animeList
     Scaffold (modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
@@ -63,7 +59,7 @@ fun HomeScreen(navController: NavHostController){
             modifier = Modifier.padding(innerPadding).fillMaxWidth(),
             horizontalAlignment =androidx.compose.ui.Alignment.CenterHorizontally,
         ){
-            ListCard(animeList,selected,{selected = it})
+            ListCard(categoria,selected,{selected = it})
         }
         Column (
             modifier = Modifier.padding(innerPadding).fillMaxSize().padding(16.dp),
@@ -85,9 +81,7 @@ fun HomeScreen(navController: NavHostController){
             androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(10.dp))
 
             FloatingActionButton(
-                onClick = {
-                    navController.navigate(FormularioCat)
-                }
+                onClick = onNavigateToFormulario
             ) {
                 Icon(
                     painter = painterResource(R.drawable.anadir),
@@ -177,44 +171,4 @@ class Categoria(val id: Int, val title: String, val icon: Int, val contenido: Mu
 class Contenido(val id: Int, val title: String, val image: Int, val description: String){
 
 }
-
-class SharedViewModel : ViewModel() {
-
-    var animeList by mutableStateOf(
-        mutableListOf(
-            Categoria(
-                id = 0,
-                title = "Accion",
-                icon = R.drawable.accion,
-                contenido = mutableListOf(
-                    Contenido(0, "Naruto", R.drawable.naruto, "Un ninja legendario"),
-                    Contenido(1, "Bleach", R.drawable.bleach, "Shinigamis y espadas")
-                )
-            ),
-            Categoria(
-                id = 1,
-                title = "Romance",
-                icon = R.drawable.romance,
-                contenido = mutableListOf()
-            ),
-            Categoria(
-                id = 2,
-                title = "Fantasia",
-                icon = R.drawable.fantasia,
-                contenido = mutableListOf()
-            )
-        )
-    )
-
-    var selectedCategoria by mutableStateOf<Categoria?>(null)
-
-    fun addCategoria(categoria: Categoria) {
-        animeList.add(categoria)
-    }
-
-    fun addContenidoToCategoria(categoriaId: Int, contenido: Contenido) {
-        animeList.find { it.id == categoriaId }?.contenido?.add(contenido)
-    }
-}
-
 

@@ -30,12 +30,13 @@ import com.example.tarea2.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioScreen(
-    onAgregar: (Categoria) -> Unit,
+fun FormularioContentScreen(
+    onAgregar: (Contenido) -> Unit,
     onBack: () -> Unit,
-    size : Int
+    contenidoSize: Int
 ) {
     var nombre by remember { mutableStateOf("") }
+    var descripcion by remember { mutableStateOf("")}
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -73,23 +74,28 @@ fun FormularioScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Nueva categoría", style = MaterialTheme.typography.headlineSmall)
+            Text("Nuevo Contenido", style = MaterialTheme.typography.headlineSmall)
 
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre = it },
-                label = { Text("Nombre de categoría") }
+                label = { Text("Nombre de contenido") }
+            )
+            OutlinedTextField(
+                value = descripcion,
+                onValueChange = {descripcion = it},
+                label = {Text("descripcion de contenido")}
             )
 
             Button(
                 onClick = {
-                    val nuevaCategoria = Categoria(
-                        id = size,
+                    val nuevoContenido = Contenido(
+                        id = contenidoSize,
                         title = nombre,
-                        icon = R.drawable.otros,
-                        contenido = mutableListOf()
+                        image = R.drawable.bajoconstruccion,
+                        description = descripcion
                     )
-                    onAgregar(nuevaCategoria)
+                    onAgregar(nuevoContenido)
                     onBack()
                 },
                 modifier = Modifier.padding(top = 16.dp)

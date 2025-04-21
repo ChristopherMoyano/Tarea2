@@ -11,11 +11,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,21 +41,41 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.tarea2.DetalleContenidoPage
+import com.example.tarea2.FormularioCont
 import com.example.tarea2.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SecondScreen(navController: NavController, id: Int){
-    val viewModel: SharedViewModel = viewModel()
-    val categoria = viewModel.animeList.find{it.id == id}
+fun SecondScreen(navController: NavController, categoria: Categoria){
     var selected by remember { mutableIntStateOf(0) }
 
     Scaffold (modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title ={
-                    Text("AnimeList")
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically // alinea verticalmente al centro
+                        ) {
+
+                            FloatingActionButton(
+                                onClick = { navController.popBackStack() },
+                                modifier = Modifier.size(40.dp)
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.atras),
+                                    contentDescription = "Back",
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            }
+
+
+                            androidx.compose.foundation.layout.Spacer(modifier = Modifier.width(12.dp))
+
+                            Text(text = categoria.title)
+                        }
+
                 }
             )
         }
@@ -61,11 +85,7 @@ fun SecondScreen(navController: NavController, id: Int){
             modifier = Modifier.padding(innerPadding).fillMaxWidth(),
             horizontalAlignment =androidx.compose.ui.Alignment.CenterHorizontally,
         ){
-            if (categoria != null) {
-                ListContent(categoria.contenido, selected) { selected = it }
-            } else {
-                Text("Categoría no encontrada", modifier = Modifier.padding(16.dp))
-            }
+            ListContent(categoria.contenido,selected, changeSelected = {selected = it})
         }
         Column (
             modifier = Modifier.padding(innerPadding).fillMaxSize().padding(16.dp),
@@ -73,7 +93,11 @@ fun SecondScreen(navController: NavController, id: Int){
             verticalArrangement = Arrangement.Bottom
         ){
             FloatingActionButton(
-                onClick = {}
+                onClick = {
+                    navController.navigate(
+                        DetalleContenidoPage(idCategoria = categoria.id, idContenido = selected)
+                    )
+                }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.siguiente),
@@ -85,7 +109,14 @@ fun SecondScreen(navController: NavController, id: Int){
             androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(10.dp))
 
             FloatingActionButton(
-                onClick = {}
+                onClick = {
+                    navController.navigate(
+                        FormularioCont(
+                            categoriaId = categoria.id,
+                            contenidoSize = categoria.contenido.size
+                        )
+                    )
+                }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.anadir),
